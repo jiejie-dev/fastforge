@@ -38,8 +38,29 @@ abstract class AppBuilder {
   }) async {
     final time = Stopwatch()..start();
 
-    BuildConfig config = BuildConfig(arguments: arguments);
+    final builtinArguments = <String, dynamic>{
+      'dart-define': {
+        'FLUTTER_BUILD_NAME': appBuildName,
+        'FLUTTER_BUILD_NUMBER': appBuildNumber,
+      },
+    };
+
+    final mergedArguments = Map<String, dynamic>.from(builtinArguments);
+    mergedArguments.forEach((key, value) {
+      if (arguments.containsKey(key)) {
+        if (value is Map) {
+          mergedArguments[key] = {...value, ...arguments[key] as Map};
+        } else {
+          mergedArguments[key] = arguments[key];
+        }
+      } else {
+        mergedArguments[key] = value;
+      }
+    });
+
+    BuildConfig config = BuildConfig(arguments: mergedArguments);
     List<String> buildArguments = [];
+
     for (String key in config.arguments.keys) {
       dynamic value = config.arguments[key];
       if (value == null || value is bool) {
@@ -52,13 +73,6 @@ abstract class AppBuilder {
         buildArguments.addAll(['--$key', value]);
       }
     }
-
-    buildArguments.addAll([
-      '--dart-define',
-      'FLUTTER_BUILD_NAME=$appBuildName',
-      '--dart-define',
-      'FLUTTER_BUILD_NUMBER=$appBuildNumber',
-    ]);
 
     ProcessResult processResult = await flutter.withEnv(environment).build(
       [buildSubcommand, ...buildArguments],
