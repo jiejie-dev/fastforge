@@ -32,6 +32,30 @@ abstract class AppBuilder {
     return this.platform == platform;
   }
 
+  /// 递归合并两个 map，如果两个 map 都有相同的 key 且值都是 Map，则递归合并 Map；
+  /// 否则使用第二个 map 的值覆盖第一个 map 的值。
+  Map<String, dynamic> _mergeArguments(
+    Map<String, dynamic> base,
+    Map<String, dynamic> override,
+  ) {
+    final merged = Map<String, dynamic>.from(base);
+
+    override.forEach((key, value) {
+      final baseValue = merged[key];
+      if (baseValue is Map && value is Map) {
+        // 递归合并嵌套的 Map
+        merged[key] = _mergeArguments(
+          Map<String, dynamic>.from(baseValue),
+          Map<String, dynamic>.from(value),
+        );
+      } else {
+        merged[key] = value;
+      }
+    });
+
+    return merged;
+  }
+
   Future<BuildResult> build({
     required Map<String, dynamic> arguments,
     Map<String, String>? environment,
@@ -44,39 +68,8 @@ abstract class AppBuilder {
         'FLUTTER_BUILD_NUMBER': appBuildNumber,
       },
     };
-    builtinArguments.forEach((key, value) {
-      print('builtinArguments[$key]: ${builtinArguments[key]}');
-    });
-    arguments.forEach((key, value) {
-      if (value is Map) {
-        value.forEach((subKey, subValue) {
-          print('arguments[$key][$subKey]: ${arguments[key][subKey]}');
-        });
-      } else {
-        print('arguments[$key]: ${arguments[key]}');
-      }
-    });
 
-    final mergedArguments = Map<String, dynamic>.from(builtinArguments);
-    mergedArguments.forEach((key, value) {
-      print('mergedArguments[$key]: ${mergedArguments[key]}');
-      if (arguments.containsKey(key)) {
-        print('mergedArguments[$key]: ${mergedArguments[key]}');
-        print('arguments[$key]: ${arguments[key]}');
-        if (value is Map) {
-          print('value is Map');
-          mergedArguments[key] = {...value, ...arguments[key] as Map};
-          print('mergedArguments[$key]: ${mergedArguments[key]}');
-        } else {
-          mergedArguments[key] = arguments[key];
-        }
-      } else {
-        mergedArguments[key] = value;
-      }
-    });
-    arguments.forEach((key, value) {
-      mergedArguments[key] = value;
-    });
+    final mergedArguments = _mergeArguments(builtinArguments, arguments);
 
     BuildConfig config = BuildConfig(arguments: mergedArguments);
     List<String> buildArguments = [];
