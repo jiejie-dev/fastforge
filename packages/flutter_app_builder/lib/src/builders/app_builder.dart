@@ -44,9 +44,22 @@ abstract class AppBuilder {
         'FLUTTER_BUILD_NUMBER': appBuildNumber,
       },
     };
+    builtinArguments.forEach((key, value) {
+      print('builtinArguments[$key]: ${builtinArguments[key]}');
+    });
+    arguments.forEach((key, value) {
+      if (value is Map) {
+        value.forEach((subKey, subValue) {
+          print('arguments[$key][$subKey]: ${arguments[key][subKey]}');
+        });
+      } else {
+        print('arguments[$key]: ${arguments[key]}');
+      }
+    });
 
     final mergedArguments = Map<String, dynamic>.from(builtinArguments);
     mergedArguments.forEach((key, value) {
+      print('mergedArguments[$key]: ${mergedArguments[key]}');
       if (arguments.containsKey(key)) {
         print('mergedArguments[$key]: ${mergedArguments[key]}');
         print('arguments[$key]: ${arguments[key]}');
