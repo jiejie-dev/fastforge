@@ -74,6 +74,9 @@ abstract class AppBuilder {
         mergedArguments[key] = value;
       }
     });
+    arguments.forEach((key, value) {
+      mergedArguments[key] = value;
+    });
 
     BuildConfig config = BuildConfig(arguments: mergedArguments);
     List<String> buildArguments = [];
