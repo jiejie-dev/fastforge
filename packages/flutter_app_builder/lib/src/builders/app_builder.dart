@@ -48,8 +48,12 @@ abstract class AppBuilder {
     final mergedArguments = Map<String, dynamic>.from(builtinArguments);
     mergedArguments.forEach((key, value) {
       if (arguments.containsKey(key)) {
+        print('mergedArguments[$key]: ${mergedArguments[key]}');
+        print('arguments[$key]: ${arguments[key]}');
         if (value is Map) {
+          print('value is Map');
           mergedArguments[key] = {...value, ...arguments[key] as Map};
+          print('mergedArguments[$key]: ${mergedArguments[key]}');
         } else {
           mergedArguments[key] = arguments[key];
         }
