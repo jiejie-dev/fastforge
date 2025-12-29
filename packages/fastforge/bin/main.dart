@@ -1,6 +1,7 @@
 import 'package:unified_distributor/unified_distributor.dart';
 
 Future<void> main(List<String> args) async {
+  print('Fastforge for puupee builder !');
   final cli = UnifiedDistributorCommandLineInterface(
     'fastforge',
     'Package and publish your apps with ease.',
