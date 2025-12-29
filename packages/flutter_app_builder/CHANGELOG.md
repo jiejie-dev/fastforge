@@ -1,3 +1,14 @@
+## 0.6.1
+
+ - **FIX**: Fixed android builder not supporting flavor as upper case. [#134](https://github.com/fastforgedev/fastforge/issues/134) ([#197](https://github.com/fastforgedev/fastforge/issues/197)). ([fca13756](https://github.com/fastforgedev/fastforge/commit/fca13756aacbe95c46be9f71168325084817836f))
+ - **FIX**: Unhandled exception Null check operator used on a null value ([#159](https://github.com/fastforgedev/fastforge/issues/159)). ([bacaf33a](https://github.com/fastforgedev/fastforge/commit/bacaf33a41e7f6d2aa31888e75c32220f6de0736))
+ - **FIX**: invalid windows build directory above 3.16.0 or 3.15.0-pre ([#149](https://github.com/fastforgedev/fastforge/issues/149)). ([0403ec7f](https://github.com/fastforgedev/fastforge/commit/0403ec7f2bebac6e4190c6a420c3fb5f7f23e282))
+ - **FEAT**: Add additional debug prints for argument handling in AppBuilder. ([343b1538](https://github.com/fastforgedev/fastforge/commit/343b15382611b204f9995e203c86df28edfd9d3d))
+ - **FEAT**: Add debug prints for argument merging in AppBuilder. ([145224f4](https://github.com/fastforgedev/fastforge/commit/145224f4f3fbb996e582a01d99d1dfa5f3e1249a))
+ - **FEAT**: Enhance argument merging (override dart-define) in AppBuilder for build configuration. ([7f285014](https://github.com/fastforgedev/fastforge/commit/7f285014182fc437b5c69882a3ce0d90ad4c8b40))
+ - **FEAT**: add ohos support to flutter_app_builder. ([1337fbb8](https://github.com/fastforgedev/fastforge/commit/1337fbb875d3895a00d4b39321f2aa85f0065358))
+ - **DOCS**: Update README files to standardize references to fastforge and remove outdated links. ([f2517c7d](https://github.com/fastforgedev/fastforge/commit/f2517c7df51fbf8b0d6246aac27e6ff41a8a3eb7))
+
 ## 0.6.0
 
 * feat: Support ohos platform.

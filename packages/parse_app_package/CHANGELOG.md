@@ -1,3 +1,7 @@
+## 0.6.0+1
+
+ - **FIX**(parse_app_package): fix failure to parse `Property List Binary` format. ([302f715b](https://github.com/fastforgedev/fastforge/commit/302f715be6d0bb677ebab544d884f4bc0e064de1))
+
 ## 0.6.0
 
 * bump `shell_executor` to 0.2.0
