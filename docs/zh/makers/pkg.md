@@ -7,8 +7,9 @@
 将 `make_config.yaml` 添加到你的项目 `macos/packaging/pkg` 目录。
 
 ```yaml
-install-path: /Applications
-sign-identity: <your-sign-identity>
+install_path: /Applications
+sign_pkg_identity: <your-pkg-sign-identity>
+sign_app_identity: <your-app-sign-identity>
 ```
 
 运行：

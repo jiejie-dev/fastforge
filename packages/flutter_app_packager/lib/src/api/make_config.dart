@@ -37,6 +37,7 @@ class MakeConfig {
   Directory? _packagingDirectory;
 
   MakeConfig copyWith(MakeConfig makeConfig) {
+    isInstaller = makeConfig.isInstaller;
     buildMode = makeConfig.buildMode;
     buildOutputDirectory = makeConfig.buildOutputDirectory;
     buildOutputFiles = makeConfig.buildOutputFiles;

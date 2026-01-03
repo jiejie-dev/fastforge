@@ -1,2 +1,3 @@
-install-path: /Applications/
-sign-identity: G83H824X6L
+install_path: /Applications/
+sign_pkg_identity: G83H824X6L
+sign_app_identity: <your-app-sign-identity>

@@ -7,8 +7,9 @@
 Add `make_config.yaml` to your project `macos/packaging/pkg` directory.
 
 ```yaml
-install-path: /Applications
-sign-identity: <your-sign-identity>
+install_path: /Applications
+sign_pkg_identity: <your-pkg-sign-identity>
+sign_app_identity: <your-app-sign-identity>
 ```
 
 Run:
