@@ -26,35 +26,35 @@ class AppPackageMakerPkg extends AppPackageMaker {
     File appFile = config.buildOutputFiles.first;
 
     // Sign the .app file before creating PKG if signAppIdentity is provided
-    if (makeConfig.signAppIdentity != null) {
-      // Determine entitlements file path based on build mode
-      String entitlementsPath;
-      if (config.buildMode == 'release') {
-        entitlementsPath = 'macos/Runner/Release.entitlements';
-      } else {
-        entitlementsPath = 'macos/Runner/DebugProfile.entitlements';
-      }
+    // if (makeConfig.signAppIdentity != null) {
+    //   // Determine entitlements file path based on build mode
+    //   String entitlementsPath;
+    //   if (config.buildMode == 'release') {
+    //     entitlementsPath = 'macos/Runner/Release.entitlements';
+    //   } else {
+    //     entitlementsPath = 'macos/Runner/DebugProfile.entitlements';
+    //   }
 
-      // Check if entitlements file exists
-      File entitlementsFile = File(entitlementsPath);
-      List<String> codesignArgs = [
-        '--force',
-        '--deep',
-        '--sign',
-        makeConfig.signAppIdentity!,
-        '--options',
-        'runtime',
-      ];
+    //   // Check if entitlements file exists
+    //   File entitlementsFile = File(entitlementsPath);
+    //   List<String> codesignArgs = [
+    //     '--force',
+    //     '--deep',
+    //     '--sign',
+    //     makeConfig.signAppIdentity!,
+    //     '--options',
+    //     'runtime',
+    //   ];
 
-      // Add entitlements if file exists
-      if (entitlementsFile.existsSync()) {
-        codesignArgs.addAll(['--entitlements', entitlementsPath]);
-      }
+    //   // Add entitlements if file exists
+    //   if (entitlementsFile.existsSync()) {
+    //     codesignArgs.addAll(['--entitlements', entitlementsPath]);
+    //   }
 
-      codesignArgs.add(appFile.path);
+    //   codesignArgs.add(appFile.path);
 
-      await $('codesign', codesignArgs);
-    }
+    //   await $('codesign', codesignArgs);
+    // }
 
     File outputFile = config.outputFile;
     File unsignedPkgFile = File(

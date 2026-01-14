@@ -94,25 +94,70 @@ class UnifiedDistributor {
   }
 
   Future<String?> _getCurrentVersion() async {
+    // Try multiple methods to get the version
+    
+    // Method 1: Try to find pubspec.yaml from script location (multiple levels up)
     try {
       var scriptFile = Platform.script.toFilePath();
-      var pathToPubSpecYaml = p.join(p.dirname(scriptFile), '../pubspec.yaml');
-      var pathToPubSpecLock = p.join(p.dirname(scriptFile), '../pubspec.lock');
-
-      var pubSpecYamlFile = File(pathToPubSpecYaml);
-
-      var pubSpecLockFile = File(pathToPubSpecLock);
-
-      if (pubSpecLockFile.existsSync()) {
-        var yamlDoc = loadYaml(await pubSpecLockFile.readAsString());
-        if (yamlDoc['packages'][packageName] == null) {
-          var yamlDoc = loadYaml(await pubSpecYamlFile.readAsString());
-          return yamlDoc['version'];
+      var scriptDir = p.dirname(scriptFile);
+      
+      // Try multiple levels up (for different installation scenarios)
+      var currentDir = scriptDir;
+      for (int level = 0; level < 5; level++) {
+        var pathToPubSpecYaml = p.join(currentDir, 'pubspec.yaml');
+        var pathToPubSpecLock = p.join(currentDir, 'pubspec.lock');
+        
+        var pubSpecYamlFile = File(pathToPubSpecYaml);
+        var pubSpecLockFile = File(pathToPubSpecLock);
+        
+        if (pubSpecLockFile.existsSync()) {
+          try {
+            var yamlDoc = loadYaml(await pubSpecLockFile.readAsString());
+            if (yamlDoc['packages'] != null && 
+                yamlDoc['packages'][packageName] != null) {
+              return yamlDoc['packages'][packageName]['version'];
+            }
+          } catch (_) {}
         }
-
-        return yamlDoc['packages'][packageName]['version'];
+        
+        if (pubSpecYamlFile.existsSync()) {
+          try {
+            var yamlDoc = loadYaml(await pubSpecYamlFile.readAsString());
+            if (yamlDoc['name'] == packageName && yamlDoc['version'] != null) {
+              return yamlDoc['version'];
+            }
+          } catch (_) {}
+        }
+        
+        // Move up one level
+        var parentDir = p.dirname(currentDir);
+        if (parentDir == currentDir) break; // Reached root
+        currentDir = parentDir;
       }
     } catch (_) {}
+    
+    // Method 2: Try to get version from pub global list command
+    try {
+      final result = await Process.run(
+        'dart',
+        ['pub', 'global', 'list'],
+        runInShell: true,
+      );
+      if (result.exitCode == 0) {
+        final output = result.stdout as String;
+        final lines = output.split('\n');
+        for (final line in lines) {
+          if (line.trim().startsWith('$packageName ')) {
+            // Format: "package_name version" or "package_name version (active)"
+            final parts = line.trim().split(' ');
+            if (parts.length >= 2) {
+              return parts[1];
+            }
+          }
+        }
+      }
+    } catch (_) {}
+    
     return null;
   }
 

@@ -64,6 +64,10 @@ class UnifiedDistributorCommandLineInterface {
       if (currentVersion != null) {
         logger.info(currentVersion);
         return;
+      } else {
+        logger.warning(
+            'Unable to determine version. Please ensure $packageName is properly installed.');
+        return;
       }
     }
 
@@ -77,7 +81,7 @@ class UnifiedDistributorCommandLineInterface {
         String msg = [
           '🚀 New version of $displayName available! '
                   .brightYellow(bold: true) +
-              '${result.currentVersion}'.brightRed() +
+              '${result.currentVersion ?? "unknown"}'.brightRed() +
               ' → '.brightYellow() +
               '${result.latestVersion}'.brightGreen(bold: true),
           'Update with: '.brightYellow() +
@@ -85,11 +89,16 @@ class UnifiedDistributorCommandLineInterface {
         ].join('\n');
         logger.info(msg);
       } else {
-        String msg = [
-          '🎉 You are using the latest version '.brightBlack() +
-              '(${result.currentVersion})'.brightBlack(bold: true),
-        ].join('\n');
-        logger.info(msg);
+        if (result.currentVersion != null) {
+          String msg = [
+            '🎉 You are using the latest version '.brightBlack() +
+                '(${result.currentVersion})'.brightBlack(bold: true),
+          ].join('\n');
+          logger.info(msg);
+        } else {
+          logger.warning(
+              'Unable to determine version. Please ensure $packageName is properly installed.');
+        }
       }
       logger.info('');
     }
