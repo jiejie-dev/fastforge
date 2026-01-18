@@ -10,13 +10,15 @@ import 'package:unified_distributor/unified_distributor.dart';
 class UnifiedDistributorCommandLineInterface {
   UnifiedDistributorCommandLineInterface(
     String executableName,
-    String description, {
+    String description,
+    String version, {
     String? packageName,
     String? displayName,
   }) {
     _distributor = UnifiedDistributor(
       packageName ?? executableName,
       displayName ?? executableName,
+      version,
     );
 
     if (packageName != 'fastforge') {

@@ -18,6 +18,8 @@ dependencies:
 
 dev_dependencies:
   mostly_reasonable_lints: ^0.1.2
+  build_runner: ^2.10.5
+  build_version: ^2.1.3
 
 executables:
   flutter_distributor: main

@@ -28,9 +28,13 @@ class UnifiedDistributor {
   UnifiedDistributor(
     this.packageName,
     this.displayName,
+    this.version,
   ) {
     ShellExecutor.global = DefaultShellExecutor();
   }
+
+  /// The version of the package
+  final String version;
 
   /// The name of the package
   final String packageName;
@@ -94,32 +98,33 @@ class UnifiedDistributor {
   }
 
   Future<String?> _getCurrentVersion() async {
+    return version;
     // Try multiple methods to get the version
-    
+
     // Method 1: Try to find pubspec.yaml from script location (multiple levels up)
     try {
       var scriptFile = Platform.script.toFilePath();
       var scriptDir = p.dirname(scriptFile);
-      
+
       // Try multiple levels up (for different installation scenarios)
       var currentDir = scriptDir;
       for (int level = 0; level < 5; level++) {
         var pathToPubSpecYaml = p.join(currentDir, 'pubspec.yaml');
         var pathToPubSpecLock = p.join(currentDir, 'pubspec.lock');
-        
+
         var pubSpecYamlFile = File(pathToPubSpecYaml);
         var pubSpecLockFile = File(pathToPubSpecLock);
-        
+
         if (pubSpecLockFile.existsSync()) {
           try {
             var yamlDoc = loadYaml(await pubSpecLockFile.readAsString());
-            if (yamlDoc['packages'] != null && 
+            if (yamlDoc['packages'] != null &&
                 yamlDoc['packages'][packageName] != null) {
               return yamlDoc['packages'][packageName]['version'];
             }
           } catch (_) {}
         }
-        
+
         if (pubSpecYamlFile.existsSync()) {
           try {
             var yamlDoc = loadYaml(await pubSpecYamlFile.readAsString());
@@ -128,14 +133,14 @@ class UnifiedDistributor {
             }
           } catch (_) {}
         }
-        
+
         // Move up one level
         var parentDir = p.dirname(currentDir);
         if (parentDir == currentDir) break; // Reached root
         currentDir = parentDir;
       }
     } catch (_) {}
-    
+
     // Method 2: Try to get version from pub global list command
     try {
       final result = await Process.run(
@@ -157,7 +162,7 @@ class UnifiedDistributor {
         }
       }
     } catch (_) {}
-    
+
     return null;
   }
 

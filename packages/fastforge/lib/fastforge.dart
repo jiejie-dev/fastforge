@@ -1,5 +1,6 @@
 library fastforge;
 
+import 'package:fastforge/src/version.dart';
 import 'package:unified_distributor/unified_distributor.dart';
 
 /// The main class for the Fastforge package.
@@ -8,5 +9,5 @@ import 'package:unified_distributor/unified_distributor.dart';
 /// default implementation for the [UnifiedDistributor] class.
 class Fastforge extends UnifiedDistributor {
   /// Creates a new instance of the Fastforge class.
-  Fastforge() : super('fastforge', 'Fastforge');
+  Fastforge() : super('fastforge', 'Fastforge', packageVersion);
 }
